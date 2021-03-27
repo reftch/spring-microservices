@@ -1,0 +1,69 @@
+buildscript {
+    ext {
+        springBootVersion = '2.0.3.RELEASE'
+    }
+    repositories {
+        mavenCentral()
+        jcenter()
+        maven { url "http://repo.spring.io/plugins-release" }
+    }
+    dependencies {
+        classpath("org.springframework.boot:spring-boot-gradle-plugin:${springBootVersion}")
+    }
+}
+
+plugins {
+    id 'java-library'
+    id "org.springframework.boot" version "2.0.3.RELEASE"
+    id "io.spring.dependency-management" version "1.0.6.RELEASE"
+    id 'net.ltgt.apt' version '0.10'
+}
+
+bootJar {
+    baseName = 'consumer-service'
+    version = '0.0.1-SNAPSHOT'
+    launchScript()
+}
+
+sourceCompatibility = 1.8
+targetCompatibility = 1.8
+assert System.properties['java.specification.version'] == '1.8'
+
+dependencies {
+    compile('org.springframework.cloud:spring-cloud-starter-config')
+    compile('org.springframework.cloud:spring-cloud-starter-netflix-eureka-client')
+
+    compile('org.springframework.boot:spring-boot-starter-web') 
+    compile ("io.springfox:springfox-swagger2:2.9.2") {
+        exclude module: 'mapstruct'
+    }
+    compile('io.springfox:springfox-swagger-ui:2.9.2')
+    compile('org.modelmapper:modelmapper:1.1.1')
+
+    compile('commons-io:commons-io:2.6')
+    compile('org.apache.commons:commons-lang3')
+
+    //annotationProcessor 'org.projectlombok:lombok:1.18.0'
+    //compileOnly 'org.projectlombok:lombok:1.18.0'
+    
+    testCompile('org.springframework.boot:spring-boot-starter-test')
+
+    apt "org.projectlombok:lombok:1.18.0"
+}
+
+dependencyManagement {
+    imports {
+        mavenBom "org.springframework.cloud:spring-cloud-dependencies:Finchley.BUILD-SNAPSHOT"
+    }
+}
+
+repositories {
+    maven {
+        url 'https://repo.spring.io/libs-milestone'
+    }
+    maven {
+        url 'https://repo.spring.io/libs-snapshot'
+    }
+    jcenter()
+}
+
